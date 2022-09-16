@@ -1,6 +1,8 @@
 from core.constants import LR_API
 from munch import Munch
 import requests
+import imghdr
+import os
 
 
 # make an NFT class to hold the data
@@ -42,6 +44,14 @@ class NFT(Munch):
         if img_raw.status_code != 200:
             return
 
+        if len(img_raw.content) == 0:
+            print('No content')
+
         # export the content
-        with open(f"{fp}/{self.name}.png", 'wb') as outfile:
+        export_fp = f"{fp}/{self.name}.png"
+        with open(export_fp, 'wb') as outfile:
             outfile.write(img_raw.content)
+
+        # check if the image exists --> delete it if not
+        if not imghdr.what(export_fp):
+            os.remove(export_fp)

@@ -21,6 +21,7 @@ def main(amount, hours_elapsed):
         'pagination': json.dumps({
             'first': amount
         }),
+        'status': ['EXECUTED', 'VALID'],
         'sort': 'PRICE_DESC'  # want to sort descending to get the coolest NFTs
     }
     raw = requests.get(f"{LR_API}/orders", params=params)
