@@ -47,9 +47,6 @@ def main(amount, hours_elapsed):
         # make the nft
         nft = NFT(order)
 
-        with open('test.json', 'w') as outfile:
-            outfile.write(json.dumps(nft.__dict__, indent=4))
-
         # export the nft to a folder
         nft.export(folder)
 
