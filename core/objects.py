@@ -32,29 +32,16 @@ class NFT(Munch):
     # make a function for exporting the token to a filepath
     def export(self, fp):
         # if the url is an ipfs link, reformat it to use ipfs.io
-        if self.tokenURI[:4] == 'ipfs':
-            self.tokenURI = f"https://ipfs.io/ipfs/{self.tokenURI.split('://')[-1]}"
-
-        # get the metadata
-        raw = requests.get(self.tokenURI)
-
-        # skip if you can't get any metadata
-        if raw.status_code != 200:
-            return
-
-        # get the image url
-        img_url = raw.json()['image']
-
-        # make an image name
-        img_name = f"{self.name}.png"
+        if self.imageURI[:4] == 'ipfs':
+            self.imageURI = f"https://ipfs.io/ipfs/{self.imageURI.split('://')[-1]}"
 
         # download the image to a folder
-        img_raw = requests.get(image_url)
+        img_raw = requests.get(self.imageURI)
 
         # don't download if unsuccessful response
-        if img_raw != 200:
+        if img_raw.status_code != 200:
             return
 
         # export the content
-        with open(f"{fp}/{img_name}", 'wb') as outfile:
+        with open(f"{fp}/{self.name}.png", 'wb') as outfile:
             outfile.write(img_raw.content)

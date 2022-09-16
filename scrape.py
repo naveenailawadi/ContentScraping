@@ -4,6 +4,7 @@ from datetime import datetime as dt
 import requests
 import json
 import time
+import os
 
 
 def main(amount, hours_elapsed):
@@ -33,7 +34,10 @@ def main(amount, hours_elapsed):
     orders = raw.json()['data']
 
     # make a folder to put the nfts in
-    folder = f"{now.year}-{now.month}-{now.day} ({hours_elapsed})"
+    folder = f"export/{now.year}-{now.month}-{now.day} ({hours_elapsed})"
+
+    if not os.path.exists(folder):
+        os.mkdir(folder)
 
     # make NFT objects out of each order
     for order in orders:
@@ -41,6 +45,9 @@ def main(amount, hours_elapsed):
 
         # make the nft
         nft = NFT(order)
+
+        with open('test.json', 'w') as outfile:
+            outfile.write(json.dumps(nft.__dict__, indent=4))
 
         # export the nft to a folder
         nft.export(folder)
